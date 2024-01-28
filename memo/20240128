@@ -1,0 +1,23 @@
+React-JS
+    ・vanilla JS との違い
+        1. vanilla JS : HTML -> JS
+            タグをHTMLに生成した後、JSで読む。
+        2. react JS : JS -> HTML
+            JSにてタグを生成してHTMLに配置する。
+    ・方針
+        1. HTMLタグを直接書かない。
+        2. タグを作るために、react-domを使う(library, package)
+        3. import
+            <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+            <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    ・react-dom
+        1. React elementがHTML bodyに位置できるようにする。
+        2. ReactDOM.render(タグ, 位置) => タグをHTMLに配置する
+    -----------------------------------------------------------------------------------------
+    ・これからは上記みたいなコード作成はしない。
+        ➡ もっと簡単な作成方法がある。
+    -----------------------------------------------------------------------------------------
+    ・createElement == JSX
+        1. JSX componentルール: 一番前の文字は大文字
+            小文字は一般のタグとして認識される。
+    
