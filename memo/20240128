@@ -20,4 +20,6 @@ React-JS
     ・createElement == JSX
         1. JSX componentルール: 一番前の文字は大文字
             小文字は一般のタグとして認識される。
+    ・state
+        データが格納される場所
     
