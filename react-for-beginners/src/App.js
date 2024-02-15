@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./App.module.css";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -37,37 +38,39 @@ function App() {
 
   return (
     <div>
-      <h1>The Coins! ({coins.length})</h1>
+      <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
       {loading ? <strong>Loading...</strong> : null}
-      <h2>Write USD</h2>
-      <input
-        value={inputValue === 0 ? "" : inputValue}
-        onChange={onChange}
-        type="text"
-      />
-      <select onChange={onSelect}>
-        <option value={"none"}></option>
-        {coins.map((coin) => (
-          <option
-            value={coin.quotes.USD.price + "|" + coin.symbol}
-            key={coin.id}
-          >
-            {coin.name} ({coin.symbol})
-          </option>
-        ))}
-      </select>
-      <h2>{isSelected ? "" : "골라"}</h2>
-      <h2>{isSelected ? "USD ➡ " + selectedName : ""}</h2>
-      <h2>
-        {isSelected
-          ? inputValue +
-            "(USD) = " +
-            inputValue / selectedValue +
-            "(" +
-            selectedName +
-            ")"
-          : ""}
-      </h2>
+      <div className={loading ? styles.hidden : styles.show}>
+        <h2>Write USD</h2>
+        <input
+          value={inputValue === 0 ? "" : inputValue}
+          onChange={onChange}
+          type="text"
+        />
+        <select onChange={onSelect}>
+          <option value={"none"}></option>
+          {coins.map((coin) => (
+            <option
+              value={coin.quotes.USD.price + "|" + coin.symbol}
+              key={coin.id}
+            >
+              {coin.name} ({coin.symbol})
+            </option>
+          ))}
+        </select>
+        <h2>{isSelected ? "" : "골라"}</h2>
+        <h2>{isSelected ? "USD ➡ " + selectedName : ""}</h2>
+        <h2>
+          {isSelected
+            ? inputValue +
+              "(USD) = " +
+              inputValue / selectedValue +
+              "(" +
+              selectedName +
+              ")"
+            : ""}
+        </h2>
+      </div>
     </div>
   );
 }
