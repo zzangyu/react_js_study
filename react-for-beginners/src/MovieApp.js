@@ -1,7 +1,16 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import Detail from "./routes/Detail";
 
 function MovieApp() {
-  return Router;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movie" element={<Detail />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default MovieApp;
