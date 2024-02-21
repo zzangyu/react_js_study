@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import Movie from "../components/Movie";
+import ShowMovies from "../components/ShowMovies";
+import styles from "../Movies.module.css";
 
-function Home() {
+function Movies() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const getMovies = async () => {
@@ -11,6 +12,7 @@ function Home() {
       )
     ).json();
     setMovies(json.data.movies);
+    console.log(json.data.movies);
     setLoading(false);
   };
 
@@ -34,21 +36,23 @@ function Home() {
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        <div>
-          {movies.map((movie) => (
-            <Movie
-              key={movie.id}
-              id={movie.id}
-              coverImg={movie.medium_cover_image}
-              title={movie.title}
-              summary={movie.summary}
-              genres={movie.genres}
-            />
-          ))}
+        <div id="">
+          <div>
+            {movies.map((movie) => (
+              <ShowMovies
+                key={movie.id}
+                id={movie.id}
+                coverImg={movie.medium_cover_image}
+                title={movie.title}
+                summary={movie.summary}
+                genres={movie.genres}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-export default Home;
+export default Movies;
