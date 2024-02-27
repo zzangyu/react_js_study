@@ -2,6 +2,17 @@ import { useEffect, useState } from "react";
 import ShowMovies from "../components/ShowMovies";
 import styles from "../Movies.module.css";
 
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+
 function Movies() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
@@ -20,24 +31,13 @@ function Movies() {
     getMovies();
   }, []);
 
-  /* old version
-  useEffect(() => {
-    fetch()
-      .then((response) => response.json())
-      .then((json) => {
-        setMovies(json.data.movies);
-        setLoading(false);
-      });
-  }, []);
-  */
-
   return (
     <div>
       {loading ? (
         <h1>Loading...</h1>
       ) : (
         <div id="">
-          <div>
+          <Swiper>
             {movies.map((movie) => (
               <ShowMovies
                 key={movie.id}
@@ -48,7 +48,7 @@ function Movies() {
                 genres={movie.genres}
               />
             ))}
-          </div>
+          </Swiper>
         </div>
       )}
     </div>
