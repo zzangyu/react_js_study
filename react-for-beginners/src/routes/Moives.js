@@ -1,21 +1,37 @@
 import { useEffect, useState } from "react";
 import ShowMovies from "../components/ShowMovies";
-import styles from "../Movies.module.css";
+import { motion, AnimatePresence } from "framer-motion";
 
-// import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+const variants = {
+  enter: (direction) => {
+    return {
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    };
+  },
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction) => {
+    return {
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    };
+  },
+};
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset, velocity) => {
+  return Math.abs(offset) * velocity;
+};
 
 function Movies() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
+  const [images, setImages] = useState([]);
+
   const getMovies = async () => {
     const json = await (
       await fetch(
@@ -23,32 +39,67 @@ function Movies() {
       )
     ).json();
     setMovies(json.data.movies);
-    console.log(json.data.movies);
     setLoading(false);
+    console.log(2);
+    movies.map((movie) => {
+      console.log(1);
+      setImages(movie.medium_cover_image);
+    });
   };
 
   useEffect(() => {
     getMovies();
   }, []);
+  const [[page, direction], setPage] = useState([0, 0]);
+  const wrap = (min, max, v) => {
+    const rangeSize = max - min;
+    return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+  };
+  const imageIndex = wrap(0, images.length, page);
+
+  const paginate = (newDirection) => {
+    setPage([page + newDirection, newDirection]);
+  };
 
   return (
     <div>
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        <div id="">
-          <Swiper>
-            {movies.map((movie) => (
-              <ShowMovies
-                key={movie.id}
-                id={movie.id}
-                coverImg={movie.medium_cover_image}
-                title={movie.title}
-                summary={movie.summary}
-                genres={movie.genres}
-              />
-            ))}
-          </Swiper>
+        <div>
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.img
+              key={page}
+              src={images[imageIndex]}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 },
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x);
+
+                if (swipe < -swipeConfidenceThreshold) {
+                  paginate(1);
+                } else if (swipe > swipeConfidenceThreshold) {
+                  paginate(-1);
+                }
+              }}
+            />
+          </AnimatePresence>
+          <div className="next" onClick={() => paginate(1)}>
+            {"‣"}
+          </div>
+          <div className="prev" onClick={() => paginate(-1)}>
+            {"‣"}
+          </div>
         </div>
       )}
     </div>
